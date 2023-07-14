@@ -1,15 +1,18 @@
+const DB = require('./db/DB');
 const { prompt } = require('inquirer');
+const questions = require('./questions');
 
 const init = () =>
-    prompt([
-        {
-            type: 'list',
-            name: 'action',
-            message: 'What would you like to do?',
-            choices: ['view all departments', 'view all roles', "view all employees", 'add a department', 'add a role', 'add an employee', 'update an employee role']
+    prompt(questions).then(ans => {
+        const { action } = ans;
+        
+        switch (action) {
+            case 'view all departments': return DB.viewDeparts().then(init);
+            case 'view all roles': return DB.viewRoles().then(init);
+            case 'view all employees': return DB.viewEmps().then(init);
+    
+        
         }
-    ]).then(({ action }) => {
-        console.log(action);
     });
 
 init();
